@@ -42,7 +42,12 @@ https://devhints.io/
 https://dev.to/nvish007/javascript-regex-guide-for-for-beginners-16km
 
 # CDN js
+
 https://cdnjs.com/
+
+# smashmagazine
+
+https://www.smashingmagazine.com/
 
 # Style the scrollbar
 
