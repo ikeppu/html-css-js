@@ -1,0 +1,77 @@
+version: '3.6' 
+services: 
+  portainer: 
+    container_name: portainer 
+    image: portainer/portainer-ce:latest 
+    restart: unless-stopped 
+    security_opt: 
+      - no-new-privileges:true 
+    volumes: 
+      - /etc/localtime:/etc/localtime:ro 
+      - /var/run/docker.sock:/var/run/docker.sock:ro 
+      - ./portainer-data:/data 
+    ports: 
+      - 9000:9000 
+ 
+  postgres: 
+    container_name: postgres 
+    image: postgres 
+    environment: 
+      POSTGRES_USER: user 
+      POSTGRES_PASSWORD: user 
+      PGDATA: /data/postgres 
+    volumes: 
+       - postgres:/data/postgres 
+    expose: 
+      - "5432" 
+    networks: 
+      - postgres 
+    restart: unless-stopped 
+   
+  pgadmin: 
+    container_name: pgadmin 
+    image: dpage/pgadmin4 
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: guest@guest.co 
+      PGADMIN_DEFAULT_PASSWORD: guest 
+      PGADMIN_CONFIG_SERVER_MODE: 'False' 
+    volumes: 
+       - pgadmin:/var/lib/pgadmin 
+    ports: 
+      - "8080:80" 
+    networks: 
+      - postgres 
+    restart: unless-stopped 
+     
+  webapp: 
+    container_name: web 
+    build: 
+      context: "./god-father-bars" 
+      dockerfile: Dockerfile 
+    ports: 
+      - "3010:80"  
+    networks: 
+      - api 
+    restart: always 
+ 
+  webapi: 
+    container_name: webapi 
+    build: 
+      context: "./godfather-crm" 
+      dockerfile: Dockerfile 
+    ports: 
+      - "5000:80"  
+    networks: 
+      - api 
+      - postgres 
+    restart: always 
+networks: 
+  api: 
+  postgres: 
+    driver: bridge 
+ 
+ 
+volumes: 
+  postgres: 
+  pgadmin: 
+  data:
