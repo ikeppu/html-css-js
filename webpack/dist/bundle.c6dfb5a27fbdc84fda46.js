@@ -71,7 +71,7 @@ var HelloWorldButton = /*#__PURE__*/function () {
 }();
 /* harmony default export */ const hello_world_button = (HelloWorldButton);
 ;// CONCATENATED MODULE: ./src/ps.jpg
-const ps_namespaceObject = __webpack_require__.p + "bd1a3cc8170f8dde8da1.jpg";
+const ps_namespaceObject = __webpack_require__.p + "./ps.jpg";
 ;// CONCATENATED MODULE: ./src/altText.txt
 const altText_namespaceObject = "Hello world";
 ;// CONCATENATED MODULE: ./src/add-image.js

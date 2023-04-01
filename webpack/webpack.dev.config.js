@@ -1,17 +1,28 @@
 const path = require("path");
-const TerserPlugin = require("terser-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+// const TerserPlugin = require("terser-webpack-plugin");
+// const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+// const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
 module.exports = {
   entry: "./src/index.js",
   output: {
-    filename: "bundle.[contenthash].js",
+    filename: "bundle.js",
     path: path.resolve(__dirname, "./dist"),
     //path: "http://some-cdn.com/",
   },
-  mode: "production",
+  mode: "development",
+  devServer: {
+    port: 9000,
+    static: {
+      directory: path.resolve(__dirname, "./dist"),
+    },
+    devMiddleware: {
+      index: "index.html",
+      writeToDisk: true,
+    },
+  },
   module: {
     rules: [
       {
@@ -30,12 +41,12 @@ module.exports = {
       {
         test: /\.css$/,
         // use: ["style-loader", "css-loader"],
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: ["style-laoder", "css-loader"],
       },
       {
         test: /\.scss$/,
         // use: ["style-loader", "css-loader", "sass-loader"],
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
         test: /.\.js$/,
@@ -48,30 +59,29 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.hbs$/,
+        use: ["handlebars-loader"],
+      },
     ],
   },
-  optimization: {
-    minimizer: [
-      // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
-      // `...`,
-      new CssMinimizerPlugin(),
-    ],
-    minimize: true,
-  },
-  plugins: [
-    new TerserPlugin(),
-    new MiniCssExtractPlugin({
-      filename: "styles.[contenthash].css",
-    }),
-    new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin(),
-  ],
-
-  // devServer: {
-  //   static: {
-  //     directory: path.join(__dirname, "public"),
-  //   },
-  //   compress: true,
-  //   port: 9000,
+  // optimization: {
+  //   minimizer: [
+  //     new CssMinimizerPlugin(),
+  //   ],
+  //   minimize: true,
   // },
+  plugins: [
+    // new TerserPlugin(),
+    // new MiniCssExtractPlugin({
+    //   filename: "styles.css",
+    // }),
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: "src/index.hbs",
+
+      title: "Hello World",
+      description: "description",
+    }),
+  ],
 };

@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
 module.exports = {
   entry: "./src/index.js",
   output: {
@@ -52,6 +53,28 @@ module.exports = {
         test: /\.hbs$/,
         use: ["handlebars-loader"],
       },
+      {
+        test: /\.(png|jpg|svg)$/,
+        type: "asset",
+        parser: {},
+        generator: {
+          filename: "./[name][ext]",
+        },
+        use: [
+          {
+            loader: "image-webpack-loader",
+            options: {
+              mozjpeg: {
+                quality: 40,
+              },
+              pngquant: {
+                quality: [0.65, 0.9],
+                speed: 4,
+              },
+            },
+          },
+        ],
+      },
     ],
   },
   optimization: {
@@ -69,11 +92,10 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      options: {
-        title: "Hello World",
-        template: "src/index.hbs",
-        description: "description",
-      },
+      template: "src/index.hbs",
+
+      title: "Hello World",
+      description: "description",
     }),
   ],
 };
