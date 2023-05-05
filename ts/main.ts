@@ -166,8 +166,178 @@ class Teacher extends Person {
   }
 }
 
+/* *********** POLYMORPHISM ************** */
+printNames([new Student(20, 'Dara', 'Lara'), new Teacher('Brrr', 'Andrew')]);
+
 function printNames(people: Person[]) {
   for (let person of people) {
     console.log(person.fullName);
   }
 }
+/* *********** END POLYMORPHISM ************** */
+
+/* *********** ABSTRACTS ************** */
+
+abstract class Shape {
+  constructor(public color: string) {}
+
+  abstract render(): void;
+}
+
+class Circle extends Shape {
+  constructor(public radius: number, color: string) {
+    super(color);
+  }
+
+  override render(): void {
+    console.log('Rendering the circle');
+  }
+}
+
+/* *********** END ABSTRACTS ************** */
+
+/* *********** INTERFACES ************** */
+
+interface Calendar {
+  name: string;
+  addEvent(): void;
+  removeEvent(): void;
+}
+
+interface CloudCalendar extends Calendar {
+  sync(): void;
+}
+
+class GoogleCalendar implements CloudCalendar {
+  name: string;
+  addEvent(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  removeEvent(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  sync(): void {
+    throw new Error('Method not implemented.');
+  }
+}
+
+/* *********** END INTERFACES ************** */
+
+/* ***********  GENERICS ************** */
+class KeyValuePair<T, V> {
+  constructor(public key: T, public value: V) {}
+}
+
+let pair = new KeyValuePair<number, string>(1, 'Hello world');
+let pair2 = new KeyValuePair<string, string>('1', 'Hello world');
+
+function wrapInArray<T>(value: T) {
+  return [value];
+}
+
+let number = wrapInArray<number>(1);
+
+/* *********** END GENERICS ************** */
+
+function echo<T extends number | string>(value: T): T {
+  return value;
+}
+
+// echo(1);
+// echo("abc");
+// echo(true);
+
+interface Product {
+  name: string;
+  price: number;
+}
+
+class Store<T> {
+  protected _objects: T[] = [];
+
+  add(obj: T): void {
+    this._objects.push(obj);
+  }
+
+  find(property: keyof T, value: unknown): T | undefined {
+    return this._objects.find((obj) => obj[property] === value);
+  }
+}
+
+let store = new Store<Product>();
+store.add({ name: 'a', price: 1 });
+store.find('name', 'a');
+
+class CompressibleStore<T> extends Store<T> {
+  compress() {}
+}
+
+class ProductStore extends Store<Product> {}
+
+type ReadOnlyProduct = {
+  readonly [K in keyof Product]: Product[K];
+};
+
+let product: ReadOnlyProduct = { name: 'cat', price: 9999 };
+
+// function Component(constructor: Function, args) {
+//   console.log(args);
+
+//   // Object.seal(constructor);
+//   // Object.seal(constructor.prototype);
+
+//   console.log('Component decorator called');
+//   constructor.prototype.uniqueId = Date.now();
+//   constructor.prototype.insertInDom = () => {
+//     console.log('Inserting the component in the DOM');
+//   };
+// }
+// Decorator factory
+function Component(value) {
+  console.log(value);
+
+  return function Component(constructor: Function, args) {
+    console.log(args);
+
+    // Object.seal(constructor);
+    // Object.seal(constructor.prototype);
+
+    console.log('Component decorator called');
+    constructor.prototype.uniqueId = Date.now();
+    constructor.prototype.insertInDom = () => {
+      console.log('Inserting the component in the DOM');
+    };
+  };
+}
+
+@Component({ selector: '#my-profile' })
+class ProfileComponent {}
+
+function Pipe(constructor: Function, args) {
+  console.log('Pipe decorator called');
+  constructor.prototype.pipe = true;
+}
+
+@Component({ selector: '#my-profile' })
+@Pipe
+class ProfileComponentSecond {}
+
+function Log() {
+  console.log('first(): factory evaluated');
+  return function (
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {
+    console.log('first(): called');
+  };
+}
+
+// class PersonSecond {
+//   @Log()
+//   say(message: string) {
+//     console.log('Person says ' + message);
+//   }
+// }
