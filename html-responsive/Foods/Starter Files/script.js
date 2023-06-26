@@ -1,6 +1,6 @@
 let iconsList = document.querySelectorAll('.section-1-icons i');
+
 let counter = 1;
-console.log(iconsList);
 
 setInterval(() => {
   counter++;
@@ -16,3 +16,9 @@ setInterval(() => {
   }
   //   next icon
 }, 4000);
+
+document.querySelector('.menu').addEventListener('click', () => {
+  document.querySelectorAll('.target').forEach((item) => {
+    item.classList.toggle('change-menu');
+  });
+});
