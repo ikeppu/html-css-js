@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web:
+    build: .
+    volumes:
+      - ./web:/usr/share/nginx/web-app
+    ports:
+      - '8080:80'
+
+  nodeapp:
+    build:
+      context: ./nodeapp1
+    ports:
+      - '3000:3000'
+
+  nodeapp2:
+    build:
+      context: ./nodeapp2
+    ports:
+      - '3001:3000'
+
+  nodeapp3:
+    build:
+      context: ./nodeapp3
+    ports:
+      - '3002:3000'
