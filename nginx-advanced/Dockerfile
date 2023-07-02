@@ -2,7 +2,7 @@ FROM node:current-alpine3.12 as build
 
 WORKDIR /dist/src/app
 
-COPY . .
+COPY ./nginx.conf .
 
 FROM nginx:1.23.1 AS ngi
 
